@@ -43,9 +43,9 @@ namespace CourseApp.Controllers
 
         // GET: api/Courses/5/dates
         [HttpGet("{id}/dates")]
-        public async Task<ActionResult<IEnumerable<String>>> GetCourseDates(int id)
+        public async Task<ActionResult<IEnumerable<CourseDate>>> GetCourseDates(int id)
         {
-            return await _context.CourseDate.Where(cd => cd.CourseId == id).Select(cd => cd.Date.ToShortDateString()).ToListAsync();
+            return await _context.CourseDate.Where(cd => cd.CourseId == id).ToListAsync();
         }
 
         // PUT: api/Courses/5

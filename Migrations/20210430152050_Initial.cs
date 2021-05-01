@@ -22,29 +22,6 @@ namespace CourseApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Application",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CompanyName = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
-                    Email = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Application", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Application_Course_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Course",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CourseDate",
                 columns: table => new
                 {
@@ -64,10 +41,32 @@ namespace CourseApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Application",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CourseDateId = table.Column<int>(type: "int", nullable: false),
+                    CompanyName = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false),
+                    Email = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Application", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Application_CourseDate_CourseDateId",
+                        column: x => x.CourseDateId,
+                        principalTable: "CourseDate",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Application_CourseId",
+                name: "IX_Application_CourseDateId",
                 table: "Application",
-                column: "CourseId");
+                column: "CourseDateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseDate_CourseId",

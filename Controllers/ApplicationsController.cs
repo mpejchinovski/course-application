@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CourseApp.Data;
 using CourseApp.Models;
+using System.Text.RegularExpressions;
 
 namespace CourseApp.Controllers
 {
@@ -22,7 +23,7 @@ namespace CourseApp.Controllers
         // GET: Applications
         public async Task<IActionResult> Index()
         {
-            var courseAppDbContext = _context.Application.Include(a => a.Course);
+            var courseAppDbContext = _context.Application.Include(a => a.CourseDate).ThenInclude(cd => cd.Course);
             return View(await courseAppDbContext.ToListAsync());
         }
 
@@ -35,7 +36,8 @@ namespace CourseApp.Controllers
             }
 
             var application = await _context.Application
-                .Include(a => a.Course)
+                .Include(a => a.CourseDate)
+                .ThenInclude(cd => cd.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (application == null)
             {
@@ -49,7 +51,7 @@ namespace CourseApp.Controllers
         public IActionResult Create()
         {
             ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name");
-            ViewData["Date"] = new SelectList(_context.CourseDate, "Date", "Date");
+            ViewData["CourseDateId"] = new SelectList(string.Empty, "Id", "Date");
             return View();
         }
 
@@ -58,7 +60,7 @@ namespace CourseApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CourseId,Date,CompanyName,PhoneNumber,Email")] Application application)
+        public async Task<IActionResult> Create([Bind("Id,CourseDateId,CompanyName,PhoneNumber,Email")] Application application)
         {
             if (ModelState.IsValid)
             {
@@ -66,25 +68,39 @@ namespace CourseApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", application.CourseId);
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name");
             return View(application);
         }
 
         // GET: Applications/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var application = _context.Application.Where(a => a.Id == id).AsQueryable();
+            if (application == null)
+            {
+                return NotFound();
+            }
+
+            var course = await application.Select(p => p.CourseDate.Course).FirstAsync();
+
+            IEnumerable<SelectListItem> dateSelectList =
+                from cd in _context.CourseDate.Where(cd => cd.CourseId == course.Id)
+                select new SelectListItem
+                {
+                    Selected = (cd.Id == id),
+                    Text = cd.Date.ToShortDateString(),
+                    Value = String.Format("{0}", cd.Id)
+                };
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var application = await _context.Application.FindAsync(id);
-            if (application == null)
-            {
-                return NotFound();
-            }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", application.CourseId);
-            return View(application);
+            ViewData["CourseName"] = course.Name;
+            ViewData["CourseDateId"] = dateSelectList;
+            ViewData["CompanyName"] = application.First().CompanyName;
+            return View(await application.FirstAsync());
         }
 
         // POST: Applications/Edit/5
@@ -92,7 +108,7 @@ namespace CourseApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CourseId,Date,CompanyName,PhoneNumber,Email")] Application application)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CourseDateId,CompanyName,PhoneNumber,Email")] Application application)
         {
             if (id != application.Id)
             {
@@ -119,7 +135,6 @@ namespace CourseApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", application.CourseId);
             return View(application);
         }
 
@@ -132,7 +147,8 @@ namespace CourseApp.Controllers
             }
 
             var application = await _context.Application
-                .Include(a => a.Course)
+                .Include(a => a.CourseDate)
+                .ThenInclude(cd => cd.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (application == null)
             {

@@ -27,11 +27,8 @@ namespace CourseApp.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("CourseId")
+                    b.Property<int>("CourseDateId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -43,7 +40,7 @@ namespace CourseApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("CourseDateId");
 
                     b.ToTable("Application");
                 });
@@ -83,13 +80,13 @@ namespace CourseApp.Migrations
 
             modelBuilder.Entity("CourseApp.Models.Application", b =>
                 {
-                    b.HasOne("CourseApp.Models.Course", "Course")
+                    b.HasOne("CourseApp.Models.CourseDate", "CourseDate")
                         .WithMany()
-                        .HasForeignKey("CourseId")
+                        .HasForeignKey("CourseDateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("CourseDate");
                 });
 
             modelBuilder.Entity("CourseApp.Models.CourseDate", b =>

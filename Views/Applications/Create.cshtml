@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CourseId" class="control-label"></label>
-                <select asp-for="CourseId" class="form-control" id="courseId" asp-items="ViewBag.CourseId"></select>
+                <label class="control-label">Course</label>
+                <select class="form-control course-id-select" data-url="@Url.Action("GetCourse", "CoursesAPI")" asp-items="ViewBag.CourseId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <select asp-for="Date" class="form-control" id="dates" asp-items="@(new SelectList(string.Empty, "Id", "Date"))">
+                <label asp-for="CourseDateId" class="control-label">Date</label>
+                <select asp-for="CourseDateId" class="form-control course-date-options" asp-items="ViewBag.CourseDateId">
                 </select>
             </div>
             <div class="form-group">
@@ -49,27 +49,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
-    $(document).ready(function () {
-        $('#courseId').change(function () {
-            var id = $("#courseId").val();
-            $.ajax({
-                type: "GET",
-                url: "@Url.Action("GetCourse", "CoursesAPI")" + "/" + id + "/dates",
-                //data: { id },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    $("#dates").empty();
-                    $.each((data), function (index, row) {
-                        $("#dates").append("<option value='" + index + "'>" + row + "</option>")
-                    });
-                },
-                error: function (req, status, error) {
-                    console.log(msg);
-                }
-            });
-        });
-    });
-</script>
+    <script src="~/js/jquery/getdates.js"></script>
 }
