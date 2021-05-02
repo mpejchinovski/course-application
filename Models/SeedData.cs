@@ -28,7 +28,7 @@ namespace CourseApp.Models
                     return;
                 }
 
-                using (StreamReader r = new StreamReader(@"courses.json"))
+                using (StreamReader r = new StreamReader(@"Data/courses.json"))
                 {
                     string json = r.ReadToEnd();
                     foreach (var course in JsonConvert.DeserializeObject<List<JsonCourse>>(json))

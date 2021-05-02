@@ -33,8 +33,16 @@ namespace CourseApp
                 });
 
             services.AddControllersWithViews();
-            string connectiongString = Configuration.GetConnectionString("ConnectionString");
-            services.AddDbContextPool<CourseAppDbContext>(options => options.UseMySql(connectiongString, ServerVersion.AutoDetect(connectiongString)));
+
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var connectionUrl = Environment.GetEnvironmentVariable("CLEARDB_DATABASE_URL").Replace("mysql://", string.Empty);
+            var username = connectionUrl.Split(':')[0];
+            var password = connectionUrl.Split(':')[1].Split('@')[0];
+            var host = connectionUrl.Split('@')[1].Split('/')[0];
+            var database = connectionUrl.Split('@')[1].Split('/')[1].Split('?')[0];
+
+            string connectionString = "server=" + host + ";database=" + database + ";user=" + username + ";password=" + password;
+            services.AddDbContextPool<CourseAppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
             services.AddSwaggerGen();
             services.AddCors(o => o.AddPolicy("policy", builder =>
             {

@@ -23,6 +23,7 @@ namespace CourseApp.Controllers
 
         // GET: Applications
         [HttpGet("Applications/Index")]
+        [NonAction]
         public async Task<IActionResult> Index()
         {
             var courseAppDbContext = _context.Application.Include(a => a.CourseDate).ThenInclude(cd => cd.Course);
