@@ -1,5 +1,3 @@
-# Work Sample
-
 ## How to run
 Application currently running on Heroku.
 
