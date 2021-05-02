@@ -73,10 +73,11 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  margin-top: 10px;
+  /*  bottom by footer height */
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
