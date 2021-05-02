@@ -10,6 +10,28 @@ using CourseApp.Models;
 
 namespace CourseApp.Controllers
 {
+    public class JsonApplication
+    {
+        public int Id { get; set; }
+        public int CourseDateId { get; set; }
+        public string CourseName { get; set; }
+        public string Date { get; set; }
+        public string CompanyName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+
+        public JsonApplication(int Id, int CourseNameId, string CourseName, string Date, string CompanyName, string PhoneNumber, string Email)
+        {
+            this.Id = Id;
+            this.CourseDateId = CourseNameId;
+            this.CourseName = CourseName;
+            this.Date = Date;
+            this.CompanyName = CompanyName;
+            this.PhoneNumber = PhoneNumber;
+            this.Email = Email;
+        }
+    }
+
     [Route("api/applications")]
     [ApiController]
     public class ApplicationsAPIController : ControllerBase
@@ -23,23 +45,30 @@ namespace CourseApp.Controllers
 
         // GET: api/Applications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Application>>> GetApplication()
+        public ActionResult<IEnumerable<JsonApplication>> GetApplication()
         {
-            return await _context.Application.ToListAsync();
+            var apps = _context.Application.AsQueryable();
+            IEnumerable<JsonApplication> jsonApps =
+                from app in apps
+                select new JsonApplication(app.Id, app.CourseDateId, app.CourseDate.Course.Name,
+                    app.CourseDate.Date.ToShortDateString(), app.CompanyName, app.PhoneNumber, app.Email);
+                    
+            return Ok(jsonApps);
         }
 
         // GET: api/Applications/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Application>> GetApplication(int id)
+        public async Task<ActionResult<JsonApplication>> GetApplication(int id)
         {
-            var application = await _context.Application.FindAsync(id);
+            var app = await _context.Application.Where(a => a.Id == id).Include(a => a.CourseDate).ThenInclude(cd => cd.Course).FirstOrDefaultAsync();
 
-            if (application == null)
+            if (app == null)
             {
                 return NotFound();
             }
 
-            return application;
+            return new JsonApplication(app.Id, app.CourseDateId, app.CourseDate.Course.Name,
+                    app.CourseDate.Date.ToShortDateString(), app.CompanyName, app.PhoneNumber, app.Email);
         }
 
         // PUT: api/Applications/5

@@ -6,10 +6,10 @@
         dataType: "json",
         success: function (data) {
             console.log(data);
-            $(".course-date-options").empty();
+            $("#course-date-options").empty();
             $.each(data, function (index, row) {
                 row.date = row.date.split("T")[0];
-                $(".course-date-options").append("<option value='" + row.id + "'>" + row.date + "</option>")
+                $("#course-date-options").append("<option value='" + row.id + "'>" + row.date + "</option>")
             });
         },
         error: function (req, status, error) {
@@ -20,9 +20,9 @@
 
 $(document).ready(function() {
     $('.row').ready(function () {
-        setDateOptions(1, $('.course-id-select').data('url'));
+        setDateOptions(1, $('#course-id-select').data('url'));
     });
-    $('.course-id-select').change(function () {
+    $('#course-id-select').change(function () {
         setDateOptions($(this).val(), $(this).data('url'))
     });
 });

@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label class="control-label">Course</label>
+                <label class="control-label required">Course</label>
                 @* <h4>
                     @ViewBag.CourseName
                 </h4> *@
@@ -23,33 +23,34 @@
             </div>
           <div class="form-group">
                 <label asp-for="CourseDateId" class="control-label">Date</label>
-                <select asp-for="CourseDateId" class="form-control course-date-options" asp-items="ViewBag.CourseDateId">
+                <select asp-for="CourseDateId" class="form-control" id="course-date-options" asp-items="ViewBag.CourseDateId">
                 </select>
             </div>
             <div class="form-group">
-                <label class="control-label">Company</label>
+                <label class="control-label required">Company</label>
                 <input asp-for="CompanyName" class="form-control" />
                 <span asp-validation-for="CompanyName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
+                <label asp-for="PhoneNumber" class="control-label required"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label required"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" style="background-color: #1b6ec2" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="app-options">
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+    <a asp-action="Delete" asp-route-id='@Context.Request.RouteValues["id"]' class="btn btn-primary" style="background-color: #ff0033">Delete</a>
 </div>
 
 @section Scripts {

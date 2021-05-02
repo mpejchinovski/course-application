@@ -13,9 +13,23 @@ a {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  color: white;
+  background-color: black;
+  border: none;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 5px 15px 5px 15px;
+}
+
+.btn-primary:hover {
+  background-color: black;
+}
+
+.text-danger span {
+  color: white;
+  text-transform: lowercase;
+  position: relative;
+  top: 5px;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -61,6 +75,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  margin-top: 10px;
 }
 .footer {
   position: absolute;
@@ -68,4 +83,87 @@ body {
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+.container {
+  max-width: 100%;
+}
+
+.pb-3 {
+  width: 100%;
+}
+
+.row {
+  display: block;
+  width: 100%
+}
+
+.col-md-4 {
+  max-width: 100%;
+}
+
+.col-md-4 form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-family: "Source Sans Pro";
+}
+
+#company-section, #course-section {
+  display: flex;
+  flex-direction: column;
+  background-color: salmon;
+  width: 100%;
+  padding: 3% 10% 1% 10%;
+}
+
+#course-section {
+  background-color: white;
+}
+
+#course-section h4, #company-section h4 {
+  margin-left: 10px;
+  font-family: "Source Sans Pro";
+  font-weight: bold;
+}
+
+#course-data {
+  display: flex;
+  flex-direction: row;
+}
+
+#phone-email {
+  display: grid;
+  grid-template-columns: 35% 65%;
+}
+
+.required:after {
+  content:"*";
+  color: black;
+}
+
+#application-create-btn {
+  margin-top: 15px;
+  color: black;
+}
+
+.app-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 150px;
+  margin-left: 5px;
+}
+
+.app-options a, .app-options input {
+  margin: 5px;
+  width: 120px;
 }

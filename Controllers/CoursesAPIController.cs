@@ -22,6 +22,7 @@ namespace CourseApp.Controllers
         }
 
         //GET: api/Courses
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourse()
         {
             return await _context.Course.ToListAsync();

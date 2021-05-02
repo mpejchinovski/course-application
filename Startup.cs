@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace CourseApp
 {
@@ -30,9 +31,17 @@ namespace CourseApp
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
                 });
+
             services.AddControllersWithViews();
             string connectiongString = Configuration.GetConnectionString("ConnectionString");
             services.AddDbContextPool<CourseAppDbContext>(options => options.UseMySql(connectiongString, ServerVersion.AutoDetect(connectiongString)));
+            services.AddSwaggerGen();
+            services.AddCors(o => o.AddPolicy("policy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +68,13 @@ namespace CourseApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Applications}/{action=Create}");
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
         }
     }
